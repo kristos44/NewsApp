@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="paddingMain">16dp</dimen>
+    <dimen name="marginMain">16dp</dimen>
+    <dimen name="fontSizeMain">16sp</dimen>
+    <dimen name="fontSizeSecondary">12sp</dimen>
+</resources>
