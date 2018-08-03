@@ -50,6 +50,9 @@ public class NewsAdapter extends ArrayAdapter<News> {
         publishTimeView.setText(publishDateTimeParts[1]
                 .substring(0, publishDateTimeParts[1].length() - 1));
 
+        TextView authorTextView = listItemView.findViewById(R.id.author);
+        authorTextView.setText(currentNews.getAuthor());
+
         return listItemView;
     }
 }

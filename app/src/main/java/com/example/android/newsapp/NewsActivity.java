@@ -21,7 +21,7 @@ import java.util.List;
 public class NewsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<News>> {
     public static final String LOG_TAG = NewsActivity.class.getName();
     private static final String NEWS_REQUEST_URL =
-            "https://content.guardianapis.com/search?api-key=e8443f32-d1f0-4424-9f78-19f955538813";
+            "https://content.guardianapis.com/search?show-tags=contributor&api-key=e8443f32-d1f0-4424-9f78-19f955538813";
     private NewsAdapter mAdapter;
     private static final int NEWS_LOADER_ID = 1;
     private TextView mEmptyStateTextView;

@@ -25,9 +25,12 @@ import static com.example.android.newsapp.NewsActivity.LOG_TAG;
  */
 
 public final class QueryUtils {
+    private static final int READ_TIMEOUT = 10000;
+    private static final int CONNECTION_TIMEOUT = 15000;
+
     /**
-     * Because this class is not meant to be instantiated, it should only hold static variables
-     * and functions.
+     * Empty private constructor because this class is not meant to be instantiated,
+     * it should only hold static variables and functions.
      */
     private QueryUtils() {}
 
@@ -67,26 +70,33 @@ public final class QueryUtils {
             // Create a JSONObject from the JSON response string
             JSONObject baseJsonResponse = new JSONObject(newsJSON);
 
-            JSONObject resultJsonObject = baseJsonResponse.getJSONObject("response");
+            JSONObject resultJsonObject = baseJsonResponse.optJSONObject("response");
 
             // Extract the JSONArray associated with the key called "results",
             // which represents a list of news.
-            JSONArray newsArray = resultJsonObject.getJSONArray("results");
+            JSONArray newsArray = resultJsonObject.optJSONArray("results");
 
             // For each news in the newsArray, create an {@link News} object
             for (int i = 0; i < newsArray.length(); i++) {
 
                 // Get a single news at position i within the list of news
-                JSONObject currentNews = newsArray.getJSONObject(i);
+                JSONObject currentNews = newsArray.optJSONObject(i);
 
-                String title = currentNews.getString("webTitle");
-                String section = currentNews.getString("sectionName");
-                String publishDate = currentNews.getString("webPublicationDate");
-                String url = currentNews.getString("webUrl");
+                String title = currentNews.optString("webTitle");
+                String section = currentNews.optString("sectionName");
+                String publishDate = currentNews.optString("webPublicationDate");
+                String url = currentNews.optString("webUrl");
+                String author = "";
+
+                JSONArray tags = currentNews.optJSONArray("tags");
+                if(tags.length() != 0) {
+                    JSONObject tag = tags.optJSONObject(0);
+                    author = tag.optString("webTitle");
+                }
 
                 // Create a new {@link News} object with the title, section, publish date
                 // and url from the JSON response.
-                News news = new News(title, section, publishDate, url);
+                News news = new News(title, section, publishDate, url, author);
 
                 // Add the new {@link News} to the list of newses.
                 newses.add(news);
@@ -125,14 +135,14 @@ public final class QueryUtils {
         InputStream inputStream = null;
         try {
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setReadTimeout(10000 /* milliseconds */);
-            urlConnection.setConnectTimeout(15000 /* milliseconds */);
+            urlConnection.setReadTimeout(READ_TIMEOUT /* milliseconds */);
+            urlConnection.setConnectTimeout(CONNECTION_TIMEOUT /* milliseconds */);
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
             // If the request was successful (response code 200),
             // then read the input stream and parse the response.
-            if (urlConnection.getResponseCode() == 200) {
+            if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
             } else {

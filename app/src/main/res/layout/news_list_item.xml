@@ -67,6 +67,15 @@
             android:textSize="@dimen/fontSizeSecondary"
             tools:text="08:46:28" />
 
+        <TextView
+            android:id="@+id/author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:textColor="@color/textColorSecondary"
+            android:textSize="@dimen/fontSizeSecondary"
+            tools:text="Krzysztof Tkacz" />
+
     </LinearLayout>
 
 </LinearLayout>
